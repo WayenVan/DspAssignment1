@@ -66,19 +66,6 @@ def subPlot(x, y, xlabel, ylabel, legend, title, xscale="linear", yscale="linear
     plt.yscale(yscale)
     plt.legend()
     plt.grid()
-
-def wavePlotPSD(figure, x, lchannel, rchannel, legend="waveform"):
-    """plot all channels of wave in time domain once"""
-    xlabel="Frequency(Hz)"
-    ylabel="Magnitude"
-    
-    plt.figure(figure,figsize=(20,10))
-    plt.subplot(2,1,1)
-    subPlot(x, lchannel, xlabel, ylabel, legend, title="Left channel PSD", xscale="log")
-    plt.subplot(2,1,2)
-    subPlot(x, rchannel, xlabel, ylabel, legend, title="Right channel PSD", xscale="log")
-    plt.show()
-    plt.savefig("./Output/"+figure+".pdf")
     
 def wavePlotT(figure, x, lchannel, rchannel, legend="waveform"):
     """plot all channels of wave in time domain once"""
@@ -91,7 +78,6 @@ def wavePlotT(figure, x, lchannel, rchannel, legend="waveform"):
     plt.subplot(2,1,2)
     subPlot(x, rchannel, xlabel, ylabel, legend, title="Right channel time")
     plt.show()
-    plt.savefig("./Output/"+figure+".pdf")
 
     
 def wavePlotF(figure, xf, lchannelf, rchannelf, legend="waveform"):
@@ -105,7 +91,6 @@ def wavePlotF(figure, xf, lchannelf, rchannelf, legend="waveform"):
     plt.subplot(2,1,2)
     subPlot(xf, rchannelf, xlabel, ylabel, legend,  title="Right channel frequency", xscale = "log")
     plt.show()
-    plt.savefig("./Output/"+figure+".pdf")
 
 def generateXf(sampleRate, N):
     """generateXf for frequeny domain"""
@@ -126,6 +111,34 @@ def modifyWindow(w, startFreqency, endFreqency, sampleRate, value):
     
     w[beginPoint:endPoint] = value
     w[-endPoint:-beginPoint] = value
+
+def peakFinding(data):
+    """finding the max value of an array"""
+    maxIndex = -1
+    maxValue = 0
+    
+    for i in range(len(data)):
+        if(data[i]>maxValue):
+            maxIndex = i
+            maxValue = data[i]
+        
+    return maxIndex
+
+def peakFindingDouble(data):
+    """finding the first 2 greatest value of an array"""
+    indexMax = peakFinding(data[1:])+1
+    
+    indexTemp1 = peakFinding(data[1:indexMax-1])+1
+    indexTemp2 = peakFinding(data[indexMax+1:])+indexMax+1
+    
+    if(data[indexTemp1]>=data[indexTemp2]):
+        indexMaxSec = indexTemp1
+    elif(data[indexTemp2]>data[indexTemp1]):
+        indexMaxSec = indexTemp2
+        
+    ret = [indexMaxSec, indexMax]
+    
+    return ret
 
 def aliasingFrequency(fs, sampleRate):
     """convert the signal frequency into (0, N/2)"""
@@ -166,6 +179,8 @@ def findFrequencyBelong(f, dtmfMin, dtmfMax, sampleRate):
         
 def detectOneDigitFromChunk(data, sampleRate):
     """
+    detect each chunk
+    
     Parameters
     ----------
     data: ndarray
@@ -185,24 +200,26 @@ def detectOneDigitFromChunk(data, sampleRate):
     #cut the data half
     rdataf = dataf[0:N//2]
     
-    dtmfMin = 12
-    dtmfMax = 12
+    dtmfMin = 9
+    dtmfMax = 9
     
     #calculate the peak point
-    ind = np.argpartition(abs(rdataf), -3)[-3:]
+    #ind = np.argpartition(abs(rdataf), -3)[-3:]
+    ind = peakFindingDouble(abs(rdataf))
     
+    #cut out small signal
     if((2/N*(abs(rdataf)[ind[0]])<minMagnitude) | (2/N*(abs(rdataf)[ind[1]])<minMagnitude)):
         return 'N'
     
     f1 = ind[0]*(sampleRate/N)
     f2 = ind[1]*(sampleRate/N)
     
-    
-    
-    #start the for loop to check if the frequency meet the demand
+    #print(f1, f2)
+    #start the for loop to check if the frequency meet any of high or low frequency of dtmf
     (flag1, index1) = findFrequencyBelong(f1, dtmfMin, dtmfMax, sampleRate)
     (flag2, index2) = findFrequencyBelong(f2, dtmfMin, dtmfMax, sampleRate)
     
+    #find out corresponding point of this 2 frequency
     if((flag1==ToneFlag.high) & (flag2==ToneFlag.low)):
         return dtmfLetter[index2][index1]
     elif((flag1==ToneFlag.low) & (flag2==ToneFlag.high)):
@@ -214,19 +231,35 @@ def detectOneDigitFromChunk(data, sampleRate):
         return 'N'
 
 def autoDetectNumbers(data, sampleRate):
+    """
     
+    Parameters
+    ----------
+    data : ndarray
+        touch tone data
+    sampleRate : int or float
+        sampling frequency
+
+    Returns
+    -------
+    seriesNumber : String
+       the number detected
+
+    """
     K = 0
     N = len(data)
-    gap = 200
+    gap = 300          #the length of eah chunk
     T = 1/sampleRate
     
     preResult = 'N'
     seriesNumber = ''
     
+    #start checking numbers
+    #print("check raising edge")
     while gap-1+K*gap < N:
         result = detectOneDigitFromChunk(data[K*gap: gap-1+K*gap], sampleRate)
         if((preResult=='N') & (result != 'N')):
-            print(K*gap*T, "-", (gap-1+K*gap)*T)
+            #print(K*gap*T,'s', "-", (gap-1+K*gap)*T,'s')
             seriesNumber = seriesNumber + result
         preResult = result
         K = K + 1
@@ -235,12 +268,12 @@ def autoDetectNumbers(data, sampleRate):
 
 """main function """
 
-inputWaveAddress = "./resources/example2.wav"
+inputWaveAddress = "./resources/recordding2.wav"
 outputWaveAddress = "./Output/refinedVoice.wav"
 
 (rate, lchannel, rchannel) = readWavefile(inputWaveAddress)
 
-N = np.size(lchannel)
+N = np.size(lchannel)  
 T = 1.0/rate
 xt = generateXt(rate, N)
 xf = generateXf(rate, N)
@@ -257,7 +290,7 @@ rchannelf = np.fft.fft(rchannel)
 PSDlchannelf = np.abs(lchannelf)**2 / N
 PSDrchannelf = np.abs(rchannelf)**2 / N
 
-"""task3 refine the record"""
+"""task4 refine the record"""
 #generate window
 w = np.ones(N)
 modifyWindow(w, 200, 900, rate, 5)
@@ -269,22 +302,25 @@ rchannelfRefine = rchannelf*w
 lchannelRefine = np.fft.ifft(lchannelfRefine)
 rchannelRefine = np.fft.ifft(rchannelfRefine)
 
-"""task5"""
+"""task5 result"""
 #load .dat file
-dataI = np.loadtxt('./Resources/msc_matric_9.dat', usecols=(1), dtype=np.int16)
+for i in range(10):
+    dataAddress = './Resources/TouchToneData/msc_matric_'+str(i)+'.dat'
+    dataI = np.loadtxt(dataAddress, usecols=(1), dtype=np.int16)
+    
+    data = dataI
+    Fs2 = 1000 
+    N2 = len(data)
+    x2 = range(N2)
+    xt2 = generateXt(Fs2, N2)
+    xf2 = generateXf(Fs2, N2)
+    dataf = np.fft.fft(data)
+    
+    series = autoDetectNumbers(data, Fs2)
+    print(dataAddress+":")
+    print("final result: ", series)
 
-data = dataI
-Fs2 = 1000 
-N2 = len(data)
-x2 = range(N2)
-xt2 = generateXt(Fs2, N2)
-xf2 = generateXf(Fs2, N2)
-dataf = np.fft.fft(data)
-
-series = autoDetectNumbers(data, Fs2)
-print(series)
-
-"""plot all figures"""
+"""plot and save all figures"""
 #plot frequency
 #wavePlotF("frequencydomain", xf[0:N//2], mag2dB(2/N*np.abs(lchannelfRefine[0:N//2])), mag2dB(2/N*np.abs(rchannelfRefine[0:N//2])), legend="refined")
 #wavePlotF("frequencydomain", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:N//2])), mag2dB(2/N*np.abs(rchannelf[0:N//2])), legend="unrefined")

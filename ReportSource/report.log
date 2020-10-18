@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  18 OCT 2020 18:56
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  18 OCT 2020 22:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -271,13 +271,25 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 54.
 
-(./report.toc)
+(./report.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 7.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 7.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 7.
+)
 \tf@toc=\write3
 \openout3 = `report.toc'.
 
  [1
 
 ]
+File: ../Output/Figures/recordT.pdf Graphic file (type pdf)
+<use ../Output/Figures/recordT.pdf>
+File: ../Output/Figures/recordF.pdf Graphic file (type pdf)
+<use ../Output/Figures/recordF.pdf>
+ [2]
 (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
@@ -297,17 +309,29 @@ File: ../Output/Figures/recordFR.pdf Graphic file (type pdf)
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[2] [3] (../Assignment1.py [4
+[3] [4]
+File: ../Output/Figures/task5ExampleF.pdf Graphic file (type pdf)
+<use ../Output/Figures/task5ExampleF.pdf>
 
-] [5] [6] [7] [8] [9] [10] [11]) [12]
-(./report.aux) ) 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[5
+
+] [6] [7]
+File: ../Output/Figures/DTMFtime.pdf Graphic file (type pdf)
+<use ../Output/Figures/DTMFtime.pdf>
+ [8] (../Assignment1.py [9
+
+] [10] [11] [12] [13] [14] [15] [16])
+[17] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 6163 strings out of 479418
- 145194 string characters out of 5884584
- 773085 words of memory out of 5000000
- 23632 multiletter control sequences out of 15000+600000
- 533443 words of font info for 51 fonts, out of 8000000 for 9000
+ 6226 strings out of 479418
+ 146585 string characters out of 5884584
+ 773149 words of memory out of 5000000
+ 23683 multiletter control sequences out of 15000+600000
+ 536195 words of font info for 62 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 44i,7n,70p,368b,1656s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,7n,70p,318b,1656s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on report.pdf (12 pages).
+Output written on report.pdf (17 pages).

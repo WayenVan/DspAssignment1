@@ -254,11 +254,11 @@ def autoDetectNumbers(data, sampleRate):
     seriesNumber = ''
     
     #start checking numbers
-    #print("check raising edge")
+    print("start finding raising edge chunk")
     while gap-1+K*gap < N:
         result = detectOneDigitFromChunk(data[K*gap: gap-1+K*gap], sampleRate)
         if((preResult=='N') & (result != 'N')):
-            #print(K*gap*T,'s', "-", (gap-1+K*gap)*T,'s')
+            print(K*gap*T,'s', "-", (gap-1+K*gap)*T,'s:',result)
             seriesNumber = seriesNumber + result
         preResult = result
         K = K + 1
@@ -293,8 +293,8 @@ PSDrchannelf = np.abs(rchannelf)**2 / N
 """task4 refine the record"""
 #generate window
 w = np.ones(N)
-modifyWindow(w, 200, 900, rate, 6)
-modifyWindow(w, 6000, 10000, rate, 6)
+modifyWindow(w, 120, 900, rate, 5)
+modifyWindow(w, 6000, 10000, rate, 5)
 
 lchannelfRefine = lchannelf*w
 rchannelfRefine = rchannelf*w
@@ -303,8 +303,8 @@ lchannelRefine = np.fft.ifft(lchannelfRefine)
 rchannelRefine = np.fft.ifft(rchannelfRefine)
 
 """task5 result"""
-#load .dat file
-for i in range(10):
+#load .dat file, if change i, it can load all files
+for i in range(4,5):
     dataAddress = './Resources/TouchToneData/msc_matric_'+str(i)+'.dat'
     dataI = np.loadtxt(dataAddress, usecols=(1), dtype=np.int16)
     
@@ -330,21 +330,22 @@ for i in range(10):
 #plot time domain wave form
 wavePlotT("timedomainReference", xt, lchannelRefine.astype(np.int16), rchannelRefine.astype(np.int16), legend="refined")
 wavePlotT("timedomainReference", xt, lchannel, rchannel, legend="unrefined")
-plt.savefig(figurePath+"recordTR.pdf")
+#plt.savefig(figurePath+"recordTR.pdf")
 
 #plot frequency
 wavePlotF("frequencydomainReference", xf[0:N//2], mag2dB(2/N*np.abs(lchannelfRefine[0:N//2])), mag2dB(2/N*np.abs(rchannelfRefine[0:N//2])), legend="refined")
 wavePlotF("frequencydomainReference", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:N//2])), mag2dB(2/N*np.abs(rchannelf[0:N//2])), legend="unrefined")
-plt.savefig(figurePath+"recordFR.pdf")
+#plt.savefig(figurePath+"recordFR.pdf")
+
 
 #plot the window
-plt.figure(figsize=(20,10))
-plt.plot(xf[0:N//2], w[0:N//2])
-plt.xlabel("Frequency(Hz)")
-plt.xscale("log")
-plt.ylabel("Amplitude")
-plt.show()
-plt.savefig(figurePath+"window.pdf")
+#plt.figure(figsize=(20,10))
+#plt.plot(xf[0:N//2], w[0:N//2])
+#plt.xlabel("Frequency(Hz)")
+#plt.xscale("log")
+#plt.ylabel("Amplitude")
+#plt.show()
+#plt.savefig(figurePath+"window.pdf")
 
 #plot task5 wave
 plt.figure(figsize=(20,10))
@@ -352,13 +353,16 @@ plt.plot(xt2, data)
 plt.xlabel("Time(s)")
 plt.ylabel("Amplitude")
 plt.show()
+#plt.savefig(figurePath+"task5ExampleT.pdf")
+plt.savefig(figurePath+"DTMFtime.pdf")
 
 plt.figure(figsize=(20,10))
-plt.plot(xf2, mag2dB(abs(2/N2*dataf)))
+plt.plot(xf2[0:N2//2], mag2dB(abs(2/N2*dataf[0:N2//2])))
 plt.title("Frequency domain")
 plt.xlabel("Freqency(Hz)")
 plt.ylabel("Magnitude(dB)")
 plt.show()
+#plt.savefig(figurePath+"task5ExampleF.pdf")
 
 """export the .wav file"""
 writeWavefile(outputWaveAddress, rate, lchannelRefine.astype(np.int16), rchannelRefine.astype(np.int16))

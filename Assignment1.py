@@ -76,7 +76,6 @@ def wavePlotT(figure, x, lchannel, rchannel, legend="waveform"):
     subPlot(x, lchannel, xlabel, ylabel, legend, title="Left channel time")
     plt.subplot(2,1,2)
     subPlot(x, rchannel, xlabel, ylabel, legend, title="Right channel time")
-    plt.show()
 
     
 def wavePlotF(figure, xf, lchannelf, rchannelf, legend="waveform"):
@@ -89,8 +88,7 @@ def wavePlotF(figure, xf, lchannelf, rchannelf, legend="waveform"):
     subPlot(xf, lchannelf, xlabel, ylabel, legend, title="Left channel frequency ", xscale = "log")
     plt.subplot(2,1,2)
     subPlot(xf, rchannelf, xlabel, ylabel, legend,  title="Right channel frequency", xscale = "log")
-    plt.show()
-
+    
 def generateXf(sampleRate, N):
     """generateXf for frequeny domain"""
     return np.linspace(0.0, (N-1)*sampleRate/N, N)
@@ -321,10 +319,10 @@ for i in range(4,5):
     print("final result: ", series)
 
 """plot and save all figures"""
-#wavePlotT("timedomainRecord", xt, lchannel, rchannel, legend="record")
+wavePlotT("time domain Record", xt, lchannel, rchannel, legend="record")
 #plt.savefig("./Output/Figures/recordT.pdf")
 
-#wavePlotF("frequencydomainRecord", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:N//2])), mag2dB(2/N*np.abs(rchannelf[0:N//2])), legend="unrefined")
+wavePlotF("frequency domain Record", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:N//2])), mag2dB(2/N*np.abs(rchannelf[0:N//2])), legend="unrefined")
 #plt.savefig("./Output/Figures/recordF.pdf")
 
 #plot time domain wave form
@@ -344,25 +342,23 @@ wavePlotF("frequencydomainReference", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:
 #plt.xlabel("Frequency(Hz)")
 #plt.xscale("log")
 #plt.ylabel("Amplitude")
-#plt.show()
 #plt.savefig(figurePath+"window.pdf")
 
 #plot task5 wave
-plt.figure(figsize=(20,10))
-plt.plot(xt2, data)
-plt.xlabel("Time(s)")
-plt.ylabel("Amplitude")
-plt.show()
-#plt.savefig(figurePath+"task5ExampleT.pdf")
-plt.savefig(figurePath+"DTMFtime.pdf")
+# plt.figure(figsize=(20,10))
+# plt.plot(xt2, data)
+# plt.xlabel("Time(s)")
+# plt.ylabel("Amplitude")
+# plt.savefig(figurePath+"DTMFtime.pdf")
 
-plt.figure(figsize=(20,10))
-plt.plot(xf2[0:N2//2], mag2dB(abs(2/N2*dataf[0:N2//2])))
-plt.title("Frequency domain")
-plt.xlabel("Freqency(Hz)")
-plt.ylabel("Magnitude(dB)")
+# plt.figure(figsize=(20,10))
+# plt.plot(xf2[0:N2//2], mag2dB(abs(2/N2*dataf[0:N2//2])))
+# plt.title("Frequency domain")
+# plt.xlabel("Freqency(Hz)")
+# plt.ylabel("Magnitude(dB)")
+# plt.savefig(figurePath+"task5ExampleF.pdf")
+
 plt.show()
-#plt.savefig(figurePath+"task5ExampleF.pdf")
 
 """export the .wav file"""
 writeWavefile(outputWaveAddress, rate, lchannelRefine.astype(np.int16), rchannelRefine.astype(np.int16))

@@ -17,9 +17,9 @@ from enum import Enum
 
 """change font to fit Latex"""
 matplotlib.rcParams['mathtext.fontset'] = 'custom'
-matplotlib.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
-matplotlib.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
-matplotlib.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
+matplotlib.rcParams['mathtext.rm'] = 'Times New Roman'
+matplotlib.rcParams['mathtext.it'] = 'Times New Roman'
+matplotlib.rcParams['mathtext.bf'] = 'Times New Roman'
 
 """define globael number"""
 dtmfHighFrequency = (1209, 1336, 1477, 1633)
@@ -65,7 +65,6 @@ def subPlot(x, y, xlabel, ylabel, legend, title, xscale="linear", yscale="linear
     plt.xscale(xscale)
     plt.yscale(yscale)
     plt.legend()
-    plt.grid()
     
 def wavePlotT(figure, x, lchannel, rchannel, legend="waveform"):
     """plot all channels of wave in time domain once"""
@@ -268,8 +267,9 @@ def autoDetectNumbers(data, sampleRate):
 
 """main function """
 
-inputWaveAddress = "./resources/recordding2.wav"
+inputWaveAddress = "./resources/recordding1.wav"
 outputWaveAddress = "./Output/refinedVoice.wav"
+figurePath = "./Output/Figures/"
 
 (rate, lchannel, rchannel) = readWavefile(inputWaveAddress)
 
@@ -293,8 +293,8 @@ PSDrchannelf = np.abs(rchannelf)**2 / N
 """task4 refine the record"""
 #generate window
 w = np.ones(N)
-modifyWindow(w, 200, 900, rate, 5)
-modifyWindow(w, 6000, 10000, rate, 5)
+modifyWindow(w, 200, 900, rate, 6)
+modifyWindow(w, 6000, 10000, rate, 6)
 
 lchannelfRefine = lchannelf*w
 rchannelfRefine = rchannelf*w
@@ -321,13 +321,30 @@ for i in range(10):
     print("final result: ", series)
 
 """plot and save all figures"""
-#plot frequency
-#wavePlotF("frequencydomain", xf[0:N//2], mag2dB(2/N*np.abs(lchannelfRefine[0:N//2])), mag2dB(2/N*np.abs(rchannelfRefine[0:N//2])), legend="refined")
-#wavePlotF("frequencydomain", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:N//2])), mag2dB(2/N*np.abs(rchannelf[0:N//2])), legend="unrefined")
+#wavePlotT("timedomainRecord", xt, lchannel, rchannel, legend="record")
+#plt.savefig("./Output/Figures/recordT.pdf")
+
+#wavePlotF("frequencydomainRecord", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:N//2])), mag2dB(2/N*np.abs(rchannelf[0:N//2])), legend="unrefined")
+#plt.savefig("./Output/Figures/recordF.pdf")
 
 #plot time domain wave form
-#wavePlotT("timedomain", xt, lchannelRefine.astype(np.int16), rchannelRefine.astype(np.int16), legend="refined")
-#wavePlotT("timedomain", xt, lchannel, rchannel, legend="unrefined")
+wavePlotT("timedomainReference", xt, lchannelRefine.astype(np.int16), rchannelRefine.astype(np.int16), legend="refined")
+wavePlotT("timedomainReference", xt, lchannel, rchannel, legend="unrefined")
+plt.savefig(figurePath+"recordTR.pdf")
+
+#plot frequency
+wavePlotF("frequencydomainReference", xf[0:N//2], mag2dB(2/N*np.abs(lchannelfRefine[0:N//2])), mag2dB(2/N*np.abs(rchannelfRefine[0:N//2])), legend="refined")
+wavePlotF("frequencydomainReference", xf[0:N//2], mag2dB(2/N*np.abs(lchannelf[0:N//2])), mag2dB(2/N*np.abs(rchannelf[0:N//2])), legend="unrefined")
+plt.savefig(figurePath+"recordFR.pdf")
+
+#plot the window
+plt.figure(figsize=(20,10))
+plt.plot(xf[0:N//2], w[0:N//2])
+plt.xlabel("Frequency(Hz)")
+plt.xscale("log")
+plt.ylabel("Amplitude")
+plt.show()
+plt.savefig(figurePath+"window.pdf")
 
 #plot task5 wave
 plt.figure(figsize=(20,10))

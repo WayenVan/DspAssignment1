@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  18 OCT 2020 22:40
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  18 OCT 2020 22:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -293,9 +293,13 @@ File: ../Output/Figures/recordF.pdf Graphic file (type pdf)
 (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
+Overfull \hbox (1.23828pt too wide) in paragraph at lines 102--104
+\TU/TimesNewRoman(0)/m/n/12 we could find the variation in both time domain and
+ frequency domain with Figure4[]
+ []
+
 File: ../Output/Figures/window.pdf Graphic file (type pdf)
 <use ../Output/Figures/window.pdf>
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  19 OCT 2020 12:42
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  19 OCT 2020 13:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -327,15 +327,15 @@ File: ../Output/Figures/DTMFtime.pdf Graphic file (type pdf)
 <use ../Output/Figures/DTMFtime.pdf>
  [8] [9
 
-] (../voiceEnhancer.py [10
+] (../voice_enhancer.py [10
 
 ] [11] [12])
-(../touchToneDecoder.py [13] [14] [15] [16] [17]) [18] (./report.aux) ) 
+(../touchtonedecoder.py [13] [14] [15] [16] [17]) [18] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 6228 strings out of 479418
- 146646 string characters out of 5884584
+ 6227 strings out of 479418
+ 146639 string characters out of 5884584
  773148 words of memory out of 5000000
- 23682 multiletter control sequences out of 15000+600000
+ 23681 multiletter control sequences out of 15000+600000
  536195 words of font info for 62 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  44i,7n,70p,318b,1654s stack positions out of 5000i,500n,10000p,200000b,80000s

@@ -91,8 +91,8 @@ def modifyWindow(w, startFreqency, endFreqency, sampleRate, value):
     
 """main function """
 
-inputWaveAddress = "./resources/original.wav"
-outputWaveAddress = "./Output/improved.wav"
+inputWaveAddress = "original.wav"
+outputWaveAddress = "improved.wav"
 figurePath = "./Output/Figures/"
 
 (rate, lchannel, rchannel) = readWavefile(inputWaveAddress)

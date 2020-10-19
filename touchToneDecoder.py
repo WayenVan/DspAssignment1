@@ -194,21 +194,20 @@ def autoDetectNumbers(data, sampleRate):
 #load .dat file, if change i, it can load all files
 figurePath = "./Output/Figures/"
 
-for i in range(4,5):
-    dataAddress = './Resources/TouchToneData/msc_matric_'+str(i)+'.dat'
-    dataI = np.loadtxt(dataAddress, usecols=(1), dtype=np.int16)
+dataAddress = 'touchToneData.dat'
+dataI = np.loadtxt(dataAddress, usecols=(1), dtype=np.int16)
     
-    data = dataI
-    Fs2 = 1000 
-    N2 = len(data)
-    x2 = range(N2)
-    xt2 = generateXt(Fs2, N2)
-    xf2 = generateXf(Fs2, N2)
-    dataf = np.fft.fft(data)
+data = dataI
+Fs2 = 1000 
+N2 = len(data)
+x2 = range(N2)
+xt2 = generateXt(Fs2, N2)
+xf2 = generateXf(Fs2, N2)
+dataf = np.fft.fft(data)
     
-    series = autoDetectNumbers(data, Fs2)
-    print(dataAddress+":")
-    print("final result: ", series)
+series = autoDetectNumbers(data, Fs2)
+print(dataAddress+":")
+print("final result: ", series)
 
 """plot and save all figures"""
 #plot task5 wave

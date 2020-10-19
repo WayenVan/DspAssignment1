@@ -59,7 +59,7 @@
 % after a "%" symbol is treated as comment
 
 \section{Task1}
-The record can be found in \lstinline|"./Resources/recording1.wav"|
+The record can be found in \lstinline|"./Resources/original.wav"|
 \section{Task2}
 The time domain is as Figure\ref{fig_recordT}, the frequency domain is as Figure\ref{fig_recordF}
 \begin{figure}[h]   
@@ -100,7 +100,7 @@ def modifyWindow(w, startFreqency, endFreqency, sampleRate, value):
 	w[-endPoint:-beginPoint] = value
 \end{lstlisting}
 we could find the variation in both time domain and frequency domain with Figure\ref{fig_recordTR} and Figure\ref{fig_recordFR}\\
-Finally, Ouput the wavefile in \lstinline{"./Output/refinedVoice.wav"}:
+Finally, Ouput the wavefile in \lstinline{"./Output/improved.wav"}:
 \begin{lstlisting}[language=Python]
 writeWavefile(outputWaveAddress, rate, lchannelRefine.astype(np.int16), rchannelRefine.astype(np.int16))
 \end{lstlisting}
@@ -279,6 +279,10 @@ I affirm that this submission is my own / the groups original work in accordance
 
 \clearpage
 \section{Appendix}
-\lstinputlisting[language=Python]{../Assignment1.py}
+
+\subsection{voiceEnhancer.py}
+\lstinputlisting[language=Python]{../voiceEnhancer.py}
+\subsection{touchToneDecoder.py}
+\lstinputlisting[language=Python]{../touchToneDecoder.py}
 \end{document}
 
